@@ -8,23 +8,19 @@ import java.sql.SQLException;
 
 public class HikariCPDataSource {
 
-    private static HikariConfig config = new HikariConfig();
-    private static HikariDataSource ds;
+    private HikariCPDataSource() {
+    }
 
-    static {
-        config.setJdbcUrl("jdbc:sqlite:sample.db");
+    public static HikariDataSource createNewDataSource(String filename) {
+        HikariConfig config = new HikariConfig();
 
+        config.setJdbcUrl("jdbc:sqlite:" + filename);
         config.setDriverClassName("org.sqlite.JDBC");
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-        ds = new HikariDataSource(config);
+
+        return new HikariDataSource(config);
     }
 
-    public static Connection getConnection() throws SQLException {
-        return ds.getConnection();
-    }
-
-    private HikariCPDataSource() {
-    }
 }
